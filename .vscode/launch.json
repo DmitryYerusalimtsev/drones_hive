@@ -1,0 +1,76 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug node",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/install/lib/${input:package}/${input:node}",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+              {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+              }
+            ]
+        },
+        {
+          "name": "Re-build and debug node",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "${workspaceFolder}/src/${input:package}/target/debug/${input:node}",
+          "args": [],
+          "stopAtEntry": true,
+          "cwd": "${workspaceFolder}",
+          "externalConsole": false,
+          "preLaunchTask": "build_package",
+          "MIMode": "gdb",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+            }
+          ]
+      }
+    ],
+    "inputs": [
+        {
+          "id": "package",
+          "type": "promptString",
+          "description": "Package name",
+          "default": "example_node"
+        },
+        {
+          "id": "node",
+          "type": "promptString",
+          "description": "Node name",
+          "default": "minimal_pub"
+        }
+        // {
+        //     "id": "package",
+        //     "type": "command",
+        //     "command": "extension.commandvariable.promptStringRemember",
+        //     "args": {
+        //         "key": "package",
+        //         "description": "Package name",
+        //         "default": "example_node"
+        //     }
+        // },
+        // {
+        //     "id": "node",
+        //     "type": "command",
+        //     "command": "extension.commandvariable.promptStringRemember",
+        //     "args": {
+        //         "key": "node",
+        //         "description": "Node name",
+        //         "default": "minimal_pub"
+        //     }
+        // }
+      ]
+}

@@ -12,3 +12,13 @@ Cargo.lock
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
+
+# ROS
+build/
+install/
+log/
+
+# ROS 2 Rust
+.cargo/
+ros2/
+ros2_rust/

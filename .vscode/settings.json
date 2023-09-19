@@ -1,0 +1,9 @@
+{
+    "breadcrumbs.enabled": true,
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.executorMap": {
+        "rust": "cargo run # $fileName"
+    },
+    "rust-analyzer.linkedProjects": ["src/example_node/Cargo.toml"],
+    "rust-analyzer.files.excludeDirs": ["install/**"]
+}

@@ -1,0 +1,70 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "detail": "Build package",
+            "type": "shell",
+            "command": ". ./build.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "env": {
+                    "PACKAGE": "${input:package}"
+                }
+            }
+        },
+        {
+            "label": "run",
+            "detail": "Run ROS node in debug mode",
+            "type": "shell",
+            "command": ". ./run.sh",
+            "options": {
+                "env": {
+                    "PACKAGE": "${input:package}",
+                    "NODE": "${input:node}"
+                }
+            }
+        },
+        {
+            "label": "build_package",
+            "detail": "Build Rust ROS node without dependencies.",
+            "type": "shell",
+            "command": ". ./build_package.sh",
+            "options": {
+                "env": {
+                    "PACKAGE": "${input:package}"
+                }
+            }
+        },
+    ],
+    "inputs": [
+        // {
+        //     "id": "package",
+        //     "type": "command",
+        //     "command": "extension.commandvariable.rememberPick",
+        //     "args": { "key": "package" }
+        // },
+        // {
+        //     "id": "node",
+        //     "type": "command",
+        //     "command": "extension.commandvariable.rememberPick",
+        //     "args": { "key": "node" }
+        // },
+        {
+            "id": "package",
+            "type": "promptString",
+            "description": "Package name",
+            "default": "example_node"
+        },
+        {
+            "id": "node",
+            "type": "promptString",
+            "description": "Node name",
+            "default": "minimal_pub"
+        }
+    ]
+}
+
