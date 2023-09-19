@@ -5,5 +5,10 @@
         "rust": "cargo run # $fileName"
     },
     "rust-analyzer.linkedProjects": ["src/example_node/Cargo.toml"],
-    "rust-analyzer.files.excludeDirs": ["install/**"]
+    "rust-analyzer.files.excludeDirs": [
+        "install/**"
+    ],
+    "cSpell.words": [
+        "rclrs"
+    ]
 }

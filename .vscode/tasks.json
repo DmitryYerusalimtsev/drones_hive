@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "build",
-            "detail": "Build package",
+            "detail": "Build all packages up to specified",
             "type": "shell",
             "command": ". ./build.sh",
             "group": {
@@ -13,18 +13,6 @@
             "options": {
                 "env": {
                     "PACKAGE": "${input:package}"
-                }
-            }
-        },
-        {
-            "label": "run",
-            "detail": "Run ROS node in debug mode",
-            "type": "shell",
-            "command": ". ./run.sh",
-            "options": {
-                "env": {
-                    "PACKAGE": "${input:package}",
-                    "NODE": "${input:node}"
                 }
             }
         },
