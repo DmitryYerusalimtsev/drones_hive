@@ -51,6 +51,6 @@ impl TakeOff {
 
 pub fn start_service(node: Arc<Node>) -> Result<Arc<Service<Trigger>>, RclrsError> {
     let take_off = TakeOff { node: node.clone() };
-    // let callback = move |header, request| take_off.service(header, request);
-    node.create_service::<Trigger, _>("take_off", move |header, request| take_off.service(header, request))
+    node.create_service::<Trigger, _>("take_off", 
+        move |header, request| take_off.service(header, request))
 }
