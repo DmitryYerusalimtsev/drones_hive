@@ -29,22 +29,22 @@ impl TakeOff {
 
         match result {
             Ok(CommandResult::Failed { reason }) => 
-            Trigger_Response {
-                success: true,
-                message: format!("{}", reason),
-            },
+                Trigger_Response {
+                    success: true,
+                    message: format!("{}", reason),
+                },
 
             Ok(_) => 
-            Trigger_Response {
-                success: true,
-                message: String::from("Command completed."),
-            },
+                Trigger_Response {
+                    success: true,
+                    message: String::from("Command completed."),
+                },
             
             Err(e) => 
-            Trigger_Response {
-                success: false,
-                message: format!("{}", e),
-            }
+                Trigger_Response {
+                    success: false,
+                    message: format!("{}", e),
+                }
         }
     }
 }
