@@ -18,10 +18,9 @@
 		// uncomment to use intel iGPU
 		// "--device=/dev/dri"
 	],
-	"postStartCommand": ". /opt/ros/humble/setup.sh",
 	"containerEnv": {
-		"DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
-		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+		"DISPLAY": "host.docker.internal:0", // Needed for GUI try ":0" for windows
+		"WAYLAND_DISPLAY": "host.docker.internal:0",
 		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
 		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
 		"LIBGL_ALWAYS_SOFTWARE": "1" // Needed for software rendering of opengl
@@ -43,7 +42,7 @@
 				"twxs.cmake",
 				"yzhang.markdown-all-in-one",
 				"zachflower.uncrustify",
-				"be5invis.vscode-toml",
+				"be5invis.toml",
 				"rust-lang.rust-analyzer"
 			]
 		}

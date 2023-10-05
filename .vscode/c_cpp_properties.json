@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/workspaces/drones_hive/install/include/**",
+        "/opt/ros/humble/include/**",
+        "/workspaces/drones_hive/src/ros2/common_interfaces/sensor_msgs/include/**",
+        "/workspaces/drones_hive/src/ros2/rcl_interfaces/test_msgs/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

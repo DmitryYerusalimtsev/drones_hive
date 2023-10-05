@@ -1,0 +1,15 @@
+<package format="3">
+  <name>drone</name>
+  <version>1.0.0</version>
+  <description>This package contains nodes that represent drone and it's components.</description>
+  <maintainer email="dima@yerusalimtsev@gmail.com">user</maintainer>
+  <license>OSS</license>
+
+  <depend>rclrs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+
+  <export>
+    <build_type>ament_cargo</build_type>
+  </export>
+</package>

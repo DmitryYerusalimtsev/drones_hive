@@ -1,7 +1,5 @@
 set -e
 
-. /opt/ros/humble/setup.sh
-
 # Set the default build type
 BUILD_TYPE=RelWithDebInfo
 

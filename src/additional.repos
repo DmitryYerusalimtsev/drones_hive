@@ -1,0 +1,4 @@
+repositories:
+  turtlesim-ros2:
+    type: git
+    url: https://github.com/sukha-cn/turtlesim-ros2.git

@@ -4,11 +4,29 @@
     "code-runner.executorMap": {
         "rust": "cargo run # $fileName"
     },
-    "rust-analyzer.linkedProjects": ["src/example_node/Cargo.toml"],
+    "rust-analyzer.linkedProjects": [
+        "src/example_node/Cargo.toml",
+        "src/core/Cargo.toml",
+        "src/drone/Cargo.toml"
+    ],
     "rust-analyzer.files.excludeDirs": [
         "install/**"
     ],
     "cSpell.words": [
         "rclrs"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/workspaces/drones_hive/build/sensor_msgs_py",
+        "/workspaces/drones_hive/install/local/lib/python3.10/dist-packages",
+        "/workspaces/drones_hive/install/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/workspaces/drones_hive/build/sensor_msgs_py",
+        "/workspaces/drones_hive/install/local/lib/python3.10/dist-packages",
+        "/workspaces/drones_hive/install/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
     ]
 }

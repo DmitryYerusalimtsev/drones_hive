@@ -45,13 +45,13 @@
           "id": "package",
           "type": "promptString",
           "description": "Package name",
-          "default": "example_node"
+          "default": "catch_them_all"
         },
         {
           "id": "node",
           "type": "promptString",
           "description": "Node name",
-          "default": "minimal_pub"
+          "default": "turtle_manager"
         }
         // {
         //     "id": "package",

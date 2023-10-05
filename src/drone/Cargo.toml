@@ -1,0 +1,16 @@
+[package]
+name = "drone"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "drone"
+path = "src/drone/main.rs"
+
+[dependencies]
+core = { path = "../core" }
+rclrs = { version = "0.3" }
+rosidl_runtime_rs = { version = "0.3" }
+std_msgs = "*"
+anyhow = "1.0"
+std_srvs = "*"
