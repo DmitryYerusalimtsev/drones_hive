@@ -7,6 +7,10 @@ edition = "2021"
 name = "drone"
 path = "src/drone/main.rs"
 
+[[bin]]
+name = "motor"
+path = "src/motor/main.rs"
+
 [dependencies]
 core = { path = "../core" }
 rclrs = { version = "0.3" }
@@ -14,3 +18,4 @@ rosidl_runtime_rs = { version = "0.3" }
 std_msgs = "*"
 anyhow = "1.0"
 std_srvs = "*"
+drone_interfaces = { path = '/workspaces/drones_hive/install/share/drone_interfaces/rust' }

@@ -43,7 +43,8 @@
 				"yzhang.markdown-all-in-one",
 				"zachflower.uncrustify",
 				"be5invis.toml",
-				"rust-lang.rust-analyzer"
+				"rust-lang.rust-analyzer",
+				"ms-vscode.cmake-tools"
 			]
 		}
 	}

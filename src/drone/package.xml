@@ -2,8 +2,8 @@
   <name>drone</name>
   <version>1.0.0</version>
   <description>This package contains nodes that represent drone and it's components.</description>
-  <maintainer email="dima@yerusalimtsev@gmail.com">user</maintainer>
-  <license>OSS</license>
+  <maintainer email="dima@yerusalimtsev@gmail.com">Dmytro Yerusalimtsev</maintainer>
+  <license>Apache License 2.</license>
 
   <depend>rclrs</depend>
   <depend>std_msgs</depend>

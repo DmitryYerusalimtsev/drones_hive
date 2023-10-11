@@ -7,12 +7,17 @@
     "rust-analyzer.linkedProjects": [
         "src/example_node/Cargo.toml",
         "src/core/Cargo.toml",
-        "src/drone/Cargo.toml"
+        "src/drone/Cargo.toml",
+        "./src/drone/Cargo.toml",
+        "./src/drone/Cargo.toml",
+        "./src/drone/Cargo.toml",
+        "./src/drone/Cargo.toml"
     ],
     "rust-analyzer.files.excludeDirs": [
         "install/**"
     ],
     "cSpell.words": [
+        "consts",
         "rclrs"
     ],
     "python.autoComplete.extraPaths": [
@@ -28,5 +33,6 @@
         "/workspaces/drones_hive/install/lib/python3.10/site-packages",
         "/opt/ros/humble/lib/python3.10/site-packages",
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
-    ]
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
 }

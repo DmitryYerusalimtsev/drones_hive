@@ -1,14 +1,24 @@
 use anyhow::Result;
-use rclrs::{Node, Service, RclrsError};
+use rclrs::{Node, RclrsError};
 use core::CommandResult;
 use std::{time::Duration, sync::Arc};
 use std_srvs::srv::{Trigger, Trigger_Request, Trigger_Response};
 
-pub(crate) struct TakeOff {
-    pub node: Arc<Node>
+pub struct TakeOff {
+    node: Arc<Node>
 }
 
 impl TakeOff {
+
+    pub fn new(node: Arc<Node>) -> Result<Arc<TakeOff>, RclrsError> {
+        let take_off = Arc::new( Self { node: node.clone() });
+        let internal = take_off.clone();
+
+        let service = node.create_service::<Trigger, _>("take_off", 
+              move |header, request| internal.endpoint(header, request));
+
+        service.map(|_| take_off)
+    }
 
     fn take_off(&self) -> Result<CommandResult> {
         let name = self.node.name();
@@ -21,7 +31,7 @@ impl TakeOff {
         Ok(CommandResult::Completed)
     }
 
-    fn service(&self,
+    fn endpoint(&self,
         _request_header: &rclrs::rmw_request_id_t,
         _request: Trigger_Request) -> Trigger_Response {
 
@@ -31,7 +41,7 @@ impl TakeOff {
             Ok(CommandResult::Failed { reason }) => 
                 Trigger_Response {
                     success: true,
-                    message: format!("{}", reason),
+                    message: format!("Failed: {}", reason),
                 },
 
             Ok(_) => 
@@ -43,14 +53,8 @@ impl TakeOff {
             Err(e) => 
                 Trigger_Response {
                     success: false,
-                    message: format!("{}", e),
+                    message: format!("Failed: {}", e),
                 }
         }
     }
-}
-
-pub fn start_service(node: Arc<Node>) -> Result<Arc<Service<Trigger>>, RclrsError> {
-    let take_off = TakeOff { node: node.clone() };
-    node.create_service::<Trigger, _>("take_off", 
-        move |header, request| take_off.service(header, request))
 }
