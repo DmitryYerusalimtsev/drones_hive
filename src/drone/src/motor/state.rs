@@ -5,8 +5,7 @@ const AIR_DENSITY: f64 = 1.225; // kg/m³
 const LIFT_COEFFICIENT: f64 = 1.1554; // Example
 const NUMBER_OF_ITERATIONS: i32 = 4;
 
-#[derive(Copy)]
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct State {
     blades_radius: f64, // square meters
     rotor_disk_area: f64,
