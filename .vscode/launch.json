@@ -10,7 +10,7 @@
         "stopAtEntry": true,
         "cwd": "${workspaceFolder}",
         "externalConsole": false,
-        "preLaunchTask": "build",
+        "preLaunchTask": "build_package",
         "MIMode": "gdb",
         "setupCommands": [
           {
@@ -24,7 +24,8 @@
         "name": "Cargo: re-build and debug node",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/src/${input:package}/target/debug/${input:node}",
+        // "program": "${workspaceFolder}/src/${input:package}/target/debug/${input:node}",
+        "program": "${workspaceFolder}/install/${input:package}/lib/${input:package}/${input:node}",
         "args": [],
         "stopAtEntry": true,
         "cwd": "${workspaceFolder}",
@@ -37,7 +38,7 @@
             "text": "-enable-pretty-printing",
             "ignoreFailures": true
           }
-        ]
+        ],
       }
     ],
     "inputs": [
@@ -45,33 +46,13 @@
           "id": "package",
           "type": "promptString",
           "description": "Package name",
-          "default": "catch_them_all"
+          "default": "drone"
         },
         {
           "id": "node",
           "type": "promptString",
           "description": "Node name",
-          "default": "turtle_manager"
+          "default": "motor"
         }
-        // {
-        //     "id": "package",
-        //     "type": "command",
-        //     "command": "extension.commandvariable.promptStringRemember",
-        //     "args": {
-        //         "key": "package",
-        //         "description": "Package name",
-        //         "default": "example_node"
-        //     }
-        // },
-        // {
-        //     "id": "node",
-        //     "type": "command",
-        //     "command": "extension.commandvariable.promptStringRemember",
-        //     "args": {
-        //         "key": "node",
-        //         "description": "Node name",
-        //         "default": "minimal_pub"
-        //     }
-        // }
       ]
 }

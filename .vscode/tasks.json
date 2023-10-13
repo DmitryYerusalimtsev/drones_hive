@@ -29,29 +29,17 @@
         },
     ],
     "inputs": [
-        // {
-        //     "id": "package",
-        //     "type": "command",
-        //     "command": "extension.commandvariable.rememberPick",
-        //     "args": { "key": "package" }
-        // },
-        // {
-        //     "id": "node",
-        //     "type": "command",
-        //     "command": "extension.commandvariable.rememberPick",
-        //     "args": { "key": "node" }
-        // },
         {
             "id": "package",
             "type": "promptString",
             "description": "Package name",
-            "default": "catch_them_all"
+            "default": "drone"
         },
         {
             "id": "node",
             "type": "promptString",
             "description": "Node name",
-            "default": "turtle_manager"
+            "default": "motor"
         }
     ]
 }

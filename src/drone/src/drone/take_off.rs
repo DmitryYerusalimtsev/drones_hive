@@ -1,8 +1,11 @@
 use anyhow::Result;
 use rclrs::{Node, RclrsError};
-use core::CommandResult;
 use std::{time::Duration, sync::Arc};
 use std_srvs::srv::{Trigger, Trigger_Request, Trigger_Response};
+
+pub enum CommandResult {
+    Completed
+}
 
 pub struct TakeOff {
     node: Arc<Node>
@@ -38,12 +41,6 @@ impl TakeOff {
         let result = self.take_off();
 
         match result {
-            Ok(CommandResult::Failed { reason }) => 
-                Trigger_Response {
-                    success: true,
-                    message: format!("Failed: {}", reason),
-                },
-
             Ok(_) => 
                 Trigger_Response {
                     success: true,

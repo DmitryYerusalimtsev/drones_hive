@@ -8,8 +8,7 @@ name = "minimal_pub"
 path = "src/main.rs"
 
 [dependencies]
-rclrs = { version = "0.3" }
-rosidl_runtime_rs = { version = "0.3" }
-std_msgs = "*"
-# std_msgs = { path = '/workspaces/turtelism/install/share/std_msgs/rust' }
+rclrs = { path = '/workspaces/drones_hive/src/ros2_rust/rclrs' }
+rosidl_runtime_rs = "0.3"
+std_msgs = { path = '/workspaces/drones_hive/install/std_msgs/share/std_msgs/rust' }
 anyhow = "1.0"

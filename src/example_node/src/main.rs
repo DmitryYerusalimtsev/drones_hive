@@ -5,8 +5,6 @@ use anyhow::{Error, Result};
 fn main() -> Result<(), Error> {
     let context = rclrs::Context::new(env::args())?;
 
-    let s: String = String::from("test_pub1231231231235555552");
-
     let node = rclrs::create_node(&context, "minimal_publisher")?;
 
     let publisher =

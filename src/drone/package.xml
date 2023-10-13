@@ -1,12 +1,17 @@
+<?xml version="1.0"?>
+<?xml-model
+   href="http://download.ros.org/schema/package_format3.xsd"
+   schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>drone</name>
   <version>1.0.0</version>
   <description>This package contains nodes that represent drone and it's components.</description>
-  <maintainer email="dima@yerusalimtsev@gmail.com">Dmytro Yerusalimtsev</maintainer>
-  <license>Apache License 2.</license>
+  <maintainer email="dima.yerusalimtsev@gmail.com">Dmytro Yerusalimtsev</maintainer>
+  <license>Apache License 2.0</license>
 
   <depend>rclrs</depend>
-  <depend>std_msgs</depend>
+  <depend>rosidl_runtime_rs</depend>
+  <depend>drone_interfaces</depend>
   <depend>std_srvs</depend>
 
   <export>

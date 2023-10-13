@@ -12,10 +12,8 @@ name = "motor"
 path = "src/motor/main.rs"
 
 [dependencies]
-core = { path = "../core" }
-rclrs = { version = "0.3" }
-rosidl_runtime_rs = { version = "0.3" }
-std_msgs = "*"
 anyhow = "1.0"
-std_srvs = "*"
-drone_interfaces = { path = '/workspaces/drones_hive/install/share/drone_interfaces/rust' }
+rclrs = { path = '/workspaces/drones_hive/src/ros2_rust/rclrs' }
+rosidl_runtime_rs = "0.3"
+std_srvs = { path = '/workspaces/drones_hive/install/std_srvs/share/std_srvs/rust' }
+drone_interfaces = { path = '/workspaces/drones_hive/install/drone_interfaces/share/drone_interfaces/rust' }

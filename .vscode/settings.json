@@ -6,12 +6,7 @@
     },
     "rust-analyzer.linkedProjects": [
         "src/example_node/Cargo.toml",
-        "src/core/Cargo.toml",
-        "src/drone/Cargo.toml",
-        "./src/drone/Cargo.toml",
-        "./src/drone/Cargo.toml",
-        "./src/drone/Cargo.toml",
-        "./src/drone/Cargo.toml"
+        "src/drone/Cargo.toml"
     ],
     "rust-analyzer.files.excludeDirs": [
         "install/**"
