@@ -17,12 +17,18 @@ impl Drone {
 
     pub fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>, runtime: Runtime) -> Result<Arc<Drone>, RclrsError> {
         let drone = Arc::new( Self { node: node.clone(), state: initial_state, runtime });
-        let internal = drone.clone();
+        
+        let to_drone = Arc::clone(&drone);
+        let take_off = node.create_service::<Trigger, _>("take_off", 
+              move |header, request| to_drone.take_off(header, request));
 
-        let service = node.create_service::<Trigger, _>("take_off", 
-              move |header, request| internal.take_off(header, request));
+        let mbp_drone = Arc::clone(&drone);
+        let move_by_path = node.create_service::<Trigger, _>("move_by_path", 
+              move |header, request| mbp_drone.move_by_path(header, request));
 
-        service.map(|_| drone)
+        take_off
+            .and(move_by_path)
+            .map(|_| drone)
     }
 
     fn take_off(&self,
@@ -48,6 +54,19 @@ impl Drone {
             Trigger_Response {
                 success: error_message.is_none(),
                 message: error_message.or(Some("".to_string())).unwrap()
+            }
+    }
+
+    fn move_by_path(&self,
+        _request_header: &rclrs::rmw_request_id_t,
+        _request: Trigger_Request) -> Trigger_Response {
+            
+            let name = self.node.name();
+            println!("{name}: Moving by specified path.");
+
+            Trigger_Response {
+                success: true,
+                message: "".to_string()
             }
         }
 
