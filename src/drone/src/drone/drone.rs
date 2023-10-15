@@ -34,7 +34,7 @@ impl Drone {
 
             let state = self.state.lock().unwrap();
             let thrust_per_motor = state.weight / state.motors.len() as f64;
-            let target_thrust: HashMap<_, _> = state.motors.iter().map(|m| (m.clone(), thrust_per_motor)).collect();
+            let target_thrust = state.motors.iter().map(|m| (m.clone(), thrust_per_motor)).collect();
 
             let results = self.set_thrust(target_thrust);
             

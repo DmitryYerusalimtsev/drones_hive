@@ -22,4 +22,3 @@ log/
 .cargo/
 ros2/
 ros2_rust/
-turtlesim-ros2/
