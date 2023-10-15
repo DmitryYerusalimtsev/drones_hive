@@ -6,9 +6,14 @@ use anyhow::Result;
 use rclrs::RclrsError;
 use drone::Drone;
 use state::State;
+use tokio::runtime::{Runtime, Builder};
 
-#[tokio::main]
-async fn main() -> Result<(), RclrsError> {
+fn main() -> Result<(), RclrsError> {
+    let runtime: Runtime = Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+
     let context = rclrs::Context::new(env::args())?;
 
     let node = rclrs::create_node(&context, "drone")?;
@@ -22,7 +27,7 @@ async fn main() -> Result<(), RclrsError> {
     let initial_state = State::new(1.5, motors);
     let state = Arc::new(Mutex::new(initial_state));
 
-    Drone::new(node.clone(), state.clone())?;
+    Drone::new(node.clone(), state.clone(), runtime)?;
 
     rclrs::spin(node)
 }

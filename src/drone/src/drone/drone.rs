@@ -1,7 +1,7 @@
 use anyhow::Result;
 use rclrs::{Node, RclrsError};
 use tokio::runtime::Runtime;
-use std::sync::{Arc, Mutex};
+use std::{sync::{Arc, Mutex}, collections::HashMap};
 use std_srvs::srv::{Trigger, Trigger_Request, Trigger_Response};
 use drone_interfaces::srv::{SetThrust, SetThrust_Request, SetThrust_Response};
 
@@ -9,13 +9,14 @@ use crate::state::State;
 
 pub struct Drone {
     node: Arc<Node>,
-    state: Arc<Mutex<State>>
+    state: Arc<Mutex<State>>,
+    runtime: Runtime
 }
 
 impl Drone {
 
-    pub async fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>) -> Result<Arc<Drone>, RclrsError> {
-        let drone = Arc::new( Self { node: node.clone(), state: initial_state });
+    pub fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>, runtime: Runtime) -> Result<Arc<Drone>, RclrsError> {
+        let drone = Arc::new( Self { node: node.clone(), state: initial_state, runtime });
         let internal = drone.clone();
 
         let service = node.create_service::<Trigger, _>("take_off", 
@@ -31,38 +32,41 @@ impl Drone {
             let name = self.node.name();
             println!("{name}: Taking off.");
 
-            let state: std::sync::MutexGuard<'_, State> = self.state.lock().unwrap();
+            let state = self.state.lock().unwrap();
             let thrust_per_motor = state.weight / state.motors.len() as f64;
+            let target_thrust: HashMap<_, _> = state.motors.iter().map(|m| (m.clone(), thrust_per_motor)).collect();
 
-            let mut sub_tasks = vec![];
-            for motor in state.motors.clone() {
-                let node = self.node.clone();
+            let results = self.set_thrust(target_thrust);
+            
+            let error_message = results.iter()
+                .find(|(_, r)| !r.as_ref().unwrap().success)
+                .map( |(_, r)| r.as_ref().unwrap().message.clone())
+                .or(None);
 
-                let handle = tokio::spawn(async move {
-                    let client = node.create_client::<SetThrust>(&motor).unwrap();
-                    client.call_async(SetThrust_Request { thrust: thrust_per_motor }).await
-                });
+            println!("{name}: Took off successfully.");
 
-                sub_tasks.push(handle);
+            Trigger_Response {
+                success: error_message.is_none(),
+                message: error_message.or(Some("".to_string())).unwrap()
             }
+        }
 
-            let response = async {
-                let mut results = vec![];
-                for handle in sub_tasks {
-                    results.push(handle.await.unwrap());
-                }
-
-                let error_message = results.iter()
-                    .find(|r| !r.as_ref().unwrap().success)
-                    .map( |r: &std::result::Result<SetThrust_Response, RclrsError>| r.as_ref().unwrap().message.clone())
-                    .or(None);
-
-                Trigger_Response {
-                    success: error_message.is_none(),
-                    message: String::from("")
-                }
-            };
-
-            Runtime::new().unwrap().block_on(response)
+    fn set_thrust(&self, target_thrust: HashMap<String, f64>) -> HashMap<String, Result<SetThrust_Response, RclrsError>> {
+        target_thrust
+            .into_iter()
+            .map(|(motor, thrust)| {
+                let node = Arc::clone(&self.node);
+                let topic = motor.clone() + "/set_thrust";
+                let handle = self.runtime.spawn(async move {
+                    let client = node.create_client::<SetThrust>(&topic).unwrap();
+                    client.call_async(SetThrust_Request { thrust }).await
+                });
+                (motor, handle)
+            })
+            .map(|(motor, handle)| {
+                let result = self.runtime.block_on(handle).unwrap();
+                (motor, result)
+            })
+            .collect()
     }
 }
