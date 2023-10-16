@@ -1,19 +1,33 @@
 use std::sync::{Arc, Mutex};
 use anyhow::Result;
-use rclrs::{Node, RclrsError};
-use drone_interfaces::srv::{SetThrust, SetThrust_Request, SetThrust_Response};
+use rclrs::{Node, RclrsError, Context};
+use drone_interfaces::{msg::*, srv::*};
+use tokio::runtime::Runtime;
+use tokio::time::{sleep, Duration};
+use tokio::task::JoinHandle;
 
 use crate::state::State;
 
 pub struct Motor {
-    state: Arc<Mutex<State>>
+    node: Arc<Node>,
+    context: Arc<Context>,
+    state: Arc<Mutex<State>>,
+    runtime: Runtime
 }
 
 impl Motor {
-    pub fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>) -> Result<Arc<Motor>, RclrsError> {
-        let motor = Arc::new( Self { state: initial_state });
-        let internal = motor.clone();
+    pub fn new(node: Arc<Node>, context: Arc<Context>, initial_state: Arc<Mutex<State>>, runtime: Runtime) -> Result<Arc<Motor>, RclrsError> {
 
+        let motor = Arc::new( Self { 
+            node: node.clone(), 
+            context: context, 
+            state: initial_state, 
+            runtime: runtime 
+        });
+
+        motor.start_state_publishing();
+
+        let internal = Arc::clone(&motor);
         let service = node.create_service::<SetThrust, _>("set_thrust", 
               move |header, request| internal.set_thrust(header, request));
 
@@ -23,13 +37,42 @@ impl Motor {
     fn set_thrust(&self,
         _request_header: &rclrs::rmw_request_id_t,
         _request: SetThrust_Request) -> SetThrust_Response {
-
+        
         let state = *self.state.lock().unwrap();
-        state.set_thrust(_request.thrust);
+        let update_handle = self.runtime.spawn(async move {
+            state.set_thrust(_request.thrust).await
+        });
+        
+        let update_result = self.runtime.block_on(update_handle);
+
+        let message = match &update_result {
+            Ok(_) => "".to_string(),
+            Err(e) => e.to_string()
+        };
 
         SetThrust_Response {
-            success: true,
-            message: String::from("")
-         }
+            success: update_result.is_ok(),
+            message: message
+        }
+    }
+
+    fn start_state_publishing(&self) -> JoinHandle<()> {
+        let context = Arc::clone(&self.context);
+        let node = Arc::clone(&self.node);
+        let state_mtx = Arc::clone(&self.state);
+
+        self.runtime.spawn(async move {
+            let publisher = node.create_publisher::<MotorState>("state", rclrs::QOS_PROFILE_DEFAULT).unwrap();
+
+            while context.ok() {
+                let state = *state_mtx.lock().unwrap();
+                let mut message = MotorState::default();
+                message.rpm = state.rpm;
+                message.thrust = state.thrust;
+                publisher.publish(&message).unwrap();
+
+                sleep(Duration::from_millis(100)).await;
+            }
+        })
     }
 }

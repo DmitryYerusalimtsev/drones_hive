@@ -68,7 +68,7 @@ impl Drone {
                 success: true,
                 message: "".to_string()
             }
-        }
+    }
 
     fn set_thrust(&self, target_thrust: HashMap<String, f64>) -> HashMap<String, Result<SetThrust_Response, RclrsError>> {
         target_thrust

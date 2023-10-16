@@ -1,5 +1,5 @@
 use std::f64::consts::PI;
-use std::time::Duration;
+use tokio::time::{sleep, Duration};
 
 const AIR_DENSITY: f64 = 1.225; // kg/m³
 const LIFT_COEFFICIENT: f64 = 1.1554; // Example
@@ -9,8 +9,8 @@ const NUMBER_OF_ITERATIONS: i32 = 4;
 pub struct State {
     blades_radius: f64, // square meters
     rotor_disk_area: f64,
-    rpm: f64,
-    thrust: f64
+    pub rpm: f64,
+    pub thrust: f64
 }
 
 impl State {
@@ -24,14 +24,14 @@ impl State {
          }
     }
 
-    pub fn set_thrust(mut self, required_thrust: f64) {
+    pub async fn set_thrust(mut self, required_thrust: f64) {
         let rpm = self.rpm_to_achieve_thrust(required_thrust);
 
         while self.thrust != required_thrust {
             self.thrust += required_thrust / NUMBER_OF_ITERATIONS as f64;
             self.rpm += rpm / NUMBER_OF_ITERATIONS as f64;
 
-            std::thread::sleep(Duration::from_millis(1000 / NUMBER_OF_ITERATIONS as u64));
+            sleep(Duration::from_millis(1000 / NUMBER_OF_ITERATIONS as u64)).await;
         }
     }
 
