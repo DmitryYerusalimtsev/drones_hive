@@ -38,8 +38,9 @@ impl Motor {
         _request_header: &rclrs::rmw_request_id_t,
         _request: SetThrust_Request) -> SetThrust_Response {
         
-        let state = *self.state.lock().unwrap();
+        let state_mtx = Arc::clone(&self.state);
         let update_handle = self.runtime.spawn(async move {
+            let state = *state_mtx.lock().unwrap();
             state.set_thrust(_request.thrust).await
         });
         
