@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use anyhow::Result;
 use rclrs::{Node, RclrsError, Context};
 use drone_interfaces::{msg::*, srv::*};
-use tokio::runtime::Runtime;
+use tokio::runtime::Handle;
 use tokio::time::{sleep, Duration};
 use tokio::task::JoinHandle;
 
@@ -12,11 +12,11 @@ pub struct Motor {
     node: Arc<Node>,
     context: Arc<Context>,
     state: Arc<Mutex<State>>,
-    runtime: Runtime
+    runtime: Arc<Handle>
 }
 
 impl Motor {
-    pub fn new(node: Arc<Node>, context: Arc<Context>, initial_state: Arc<Mutex<State>>, runtime: Runtime) -> Result<Arc<Motor>, RclrsError> {
+    pub fn new(node: Arc<Node>, context: Arc<Context>, initial_state: Arc<Mutex<State>>, runtime: Arc<Handle>) -> Result<Arc<Motor>, RclrsError> {
 
         let motor = Arc::new( Self { 
             node: node.clone(), 
@@ -36,12 +36,12 @@ impl Motor {
 
     fn set_thrust(&self,
         _request_header: &rclrs::rmw_request_id_t,
-        _request: SetThrust_Request) -> SetThrust_Response {
+        request: SetThrust_Request) -> SetThrust_Response {
         
         let state_mtx = Arc::clone(&self.state);
         let update_handle = self.runtime.spawn(async move {
             let state = *state_mtx.lock().unwrap();
-            state.set_thrust(_request.thrust).await
+            state.set_thrust(request.thrust).await
         });
         
         let update_result = self.runtime.block_on(update_handle);

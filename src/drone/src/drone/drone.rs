@@ -1,6 +1,6 @@
 use anyhow::Result;
 use rclrs::{Node, RclrsError};
-use tokio::runtime::Runtime;
+use tokio::runtime::Handle;
 use std::{sync::{Arc, Mutex}, collections::HashMap};
 use std_srvs::srv::{Trigger, Trigger_Request, Trigger_Response};
 use drone_interfaces::srv::{SetThrust, SetThrust_Request, SetThrust_Response};
@@ -10,12 +10,12 @@ use crate::state::State;
 pub struct Drone {
     node: Arc<Node>,
     state: Arc<Mutex<State>>,
-    runtime: Runtime
+    runtime: Arc<Handle>
 }
 
 impl Drone {
 
-    pub fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>, runtime: Runtime) -> Result<Arc<Drone>, RclrsError> {
+    pub fn new(node: Arc<Node>, initial_state: Arc<Mutex<State>>, runtime: Arc<Handle>) -> Result<Arc<Drone>, RclrsError> {
         let drone = Arc::new( Self { node: node.clone(), state: initial_state, runtime });
         
         let to_drone = Arc::clone(&drone);
